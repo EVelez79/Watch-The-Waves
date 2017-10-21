@@ -1,0 +1,9 @@
+{
+  "__comment": "apps.twitter.com for api keys",
+  "API": {
+    "OAuthToken": "",
+    "OAuthSecret": "",
+    "ConsumerKey": "",
+    "ConsumerSecret": ""
+  }
+}
