@@ -8,6 +8,4 @@ def readConfig():
 
     jsonConfig = json.loads(strConfig)
 
-    print(type(jsonConfig))
-
     return jsonConfig
