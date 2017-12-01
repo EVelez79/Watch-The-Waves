@@ -1,12 +1,12 @@
 {
   "TwitterAPI": {
     "__comment": "apps.twitter.com for api keys",
-    "OAuthToken": "2289311809-dYq9oaD1V9K3xE29kCGQplaBV4Wi0gz98Il2hXz",
-    "OAuthSecret": "uASYZwMSUap5BdQ4shp8G8x6HsAciGP61WPRqUS3VqS7t",
-    "ConsumerKey": "taczzbvjgePlf8LIycn5pRiI3",
-    "ConsumerSecret": "fCa5bwlekHDSNznBX0yLFtFKnJuKBttZTlUAdy82GU2ImjD88s"
+    "OAuthToken": "",
+    "OAuthSecret": "",
+    "ConsumerKey": "",
+    "ConsumerSecret": ""
   },
-  "MagicSeaWeed": {
+  "MagicSeaweed": {
     "__comment": "magicseaweed.com/developer/api for api information and keys",
     "ApiKey": "",
     "Locations": ["293","616","1099","644"]
