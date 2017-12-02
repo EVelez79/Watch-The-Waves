@@ -6,9 +6,8 @@
     "ConsumerKey": "",
     "ConsumerSecret": ""
   },
-  "MagicSeaweed": {
-    "__comment": "magicseaweed.com/developer/api for api information and keys",
-    "ApiKey": "",
+  "SpitCast": {
+    "__comment": "www.spitcast.com/api/docs/ for api information, no key necessary",
     "Locations": ["293","616","1099","644"]
   },
 
