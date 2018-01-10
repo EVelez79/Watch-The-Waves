@@ -1,12 +1,12 @@
 import json
 
-configDir = "Resources/config.json"
+CONFIG_DIR = "Resources/config.json"
 
 def readConfig():
-    #load config.json
+    # Load config.json
     strConfig = file(configDir, "r").read()
 
-    #parse to dictionary
+    # Parse to dictionary
     jsonConfig = json.loads(strConfig)
 
     return jsonConfig
