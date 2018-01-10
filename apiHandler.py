@@ -1,7 +1,6 @@
-import requests, json, tweepy
-import configHandler
+import requests, json, tweepy, configHandler
 
-spitCastApiUrl = "http://api.spitcast.com/api/spot/forecast/"
+SPITCAST_URL = "http://api.spitcast.com/api/spot/forecast/"
 
 config = configHandler.readConfig()
 
@@ -12,12 +11,12 @@ def callSpitcastLocations():
     for i in locations:
         #http request and json parsing
         dataDict[i] = json.loads(requests.get(spitCastApiUrl + i).text)
+        print dataDict[0]
     #dataDict keys are strings
     return dataDict
 
-
-twitter = None
 def postTweet(message):
+    twitter = None
     #initialize twitter if this is the first run
     if twitter is None:
         twitterConfig = config["TwitterAPI"]
@@ -27,7 +26,7 @@ def postTweet(message):
         accessToken = twitterConfig["OAuthToken"]
         accessTokenSecret = twitterConfig["OAuthSecret"]
 
-        auth = tweep.OAuthHandler(consumerKey, consumerSecret)
+        auth = tweepy.OAuthHandler(consumerKey, consumerSecret)
         auth.set_access_token(accessToken, accessTokenSecret)
 
         twitter = tweepy.API(auth)
