@@ -16,10 +16,9 @@ def constructMessage():
         urlResponse = urllib.urlopen(urlToRequest)
         responseData = json.loads(urlResponse.read())
 
-def postTweet():
+def postTweet(message):
     if twitter is None:
         setTwitterAuth()
-    print twitter
 
 def setTwitterAuth():
     twitterConfig = config["TwitterAPI"]
