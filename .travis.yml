@@ -4,3 +4,6 @@ sudo: false
 
 script:
   - python tweetBot.py
+
+before_install:
+  - pip install tweepy
