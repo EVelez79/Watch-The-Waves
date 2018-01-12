@@ -1,23 +1,22 @@
-import requests, json, tweepy, configHandler
+import urllib, json, tweepy, configHandler, datetime
+
+today = datetime.datetime.today()
+tomorrow = today + datetime.timedelta(days=1)
 
 SPITCAST_URL = "http://api.spitcast.com/api/spot/forecast/"
+URL_PARAMETER = "/?dval="
 
 config = configHandler.readConfig()
 
-#takes an array of location Ids
-def callSpitcastLocations():
-    locations = config["SpitCastAPI"]["Locations"]
-    dataDict = {}
-    for i in locations:
-        #http request and json parsing
-        dataDict[i] = json.loads(requests.get(spitCastApiUrl + i).text)
-        print dataDict[0]
-    #dataDict keys are strings
-    return dataDict
+def constructMessage():
+    spots = config["SpitCastAPI"]["Locations"]
+    for spot in spots:
+        urlToRequest = SPITCAST_URL + spot + URL_PARAMETER + tomorrow.strftime('%Y%m%d')
+        urlResponse = urllib.urlopen(urlToRequest)
+        responseData = json.loads(request.read())
 
 def postTweet(message):
     twitter = None
-    #initialize twitter if this is the first run
     if twitter is None:
         twitterConfig = config["TwitterAPI"]
         consumerKey = twitterConfig["ConsumerKey"]
