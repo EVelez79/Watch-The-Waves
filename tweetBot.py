@@ -14,13 +14,12 @@ TEMPERATURE_PATH = "/county/water-temperature/"  # suffix: countyName
 twitter = apiHandler.set_twitter_auth(config)
 
 def get_data(spot, urlToRequest):
-    # strftime formats the date into YYYYMMDD for the URL parameter
     urlResponse = urllib.urlopen(urlToRequest)
     return json.loads(urlResponse.read())
 
 
-def write_json(responseData):
-    jsonFile = open("Resources/JSON_Files/forecast.txt", "w+")
+def write_json(responseData, fileToWriteTo):
+    jsonFile = open("Resources/JSON Files/forecast.txt", "w+")
     json.dump(responseData, jsonFile)
     jsonFile.close()
 
