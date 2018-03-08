@@ -1,4 +1,4 @@
-import urllib, json, tweepy, configHandler, datetime
+import urllib, json, tweepy, datetime
 
 config = configHandler.readConfig()
 # spots are Spitcast's ID for locations
@@ -22,11 +22,13 @@ class Twitter:
             urlResponse = urllib.urlopen(urlToRequest)
             responseData = json.loads(urlResponse.read())
 
+            
     #TODO implement the actual
     def postTweet(message):
         setTwitterAuth()
         api.update_status(message)
 
+        
     def _setupTwitterAuth():
         twitterConfig = self.config["TwitterAPI"]
         consumerKey = self.config["ConsumerKey"]
