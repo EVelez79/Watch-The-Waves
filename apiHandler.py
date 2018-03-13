@@ -12,6 +12,7 @@ def constructMessage():
 
 Weather = Weather(unit="f")
 
+
 class SpitCast:
     def __init__(self):
         # spots are Spitcast's ID for locations
@@ -33,9 +34,11 @@ class Twitter:
         self.twitter = self._setupTwitterAuth()
 
 
-    #TODO implement tweeting
-    def postTweet(self, message):
-        self.twitter.update_status(message)
+    def postTweet(self, message, image_path=None):
+        if image_path == None:
+            self.twitter.update_status(message)
+        else:
+            self.twitter.update_with_media(image_path, message)
 
 
     def _setupTwitterAuth(self):

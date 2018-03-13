@@ -1,6 +1,8 @@
-import apiHandler, configHandler, datetime, urllib, json
+import apiHandler, datetime, urllib, json
 
-config = configHandler.readConfig()
+CONFIG_DIR = "Resources/config.json"
+
+config = json.loads(open(CONFIG_DIR, "r").read())
 spotArray = config["SpitCastAPI"]["Locations"]  # spots are Spitcast's ID for locations
 today = datetime.datetime.today()
 tomorrow = today + datetime.timedelta(days=1)
