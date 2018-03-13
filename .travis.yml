@@ -7,3 +7,4 @@ script:
 
 before_install:
   - pip install tweepy
+  - pip install weather-api
