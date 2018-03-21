@@ -1,11 +1,10 @@
-import apiHandler, configHandler, json, time, threading
+import apiHandler, configHandler, json, threading
 from datetime import timedelta, datetime
 
+SPITCAST_API = apiHandler.SpitCast()
 config = configHandler.readConfig()
 idArray = config["Locations"]["IDs"]
 jsonDict = {}
-
-SPITCAST_API = apiHandler.SpitCast()
 
 def main():
     try:
@@ -14,7 +13,7 @@ def main():
         print("Exception when creating thread object")
 
     update_thread.start()
-    time.sleep(30)
+    time.sleep(30)  #to allow all new forecasts to be added
 
     for name in range(0,1):
         SPITCAST_API.construct_message(jsonDict[idArray[name]["Name"]], get_hour())
@@ -34,7 +33,7 @@ def get_hour():
     hourString = datetime.now() + timedelta(hours=3)
     hourString = hourString.strftime("%I%p")
 
-    if hourString[0] is "0":
+    if hourString[0] is "0":  #format string properly for JSON
         newHourString = hourString[1:]
         return newHourString
     else:
