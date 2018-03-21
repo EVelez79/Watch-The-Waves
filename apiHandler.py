@@ -1,16 +1,4 @@
 import urllib, json, tweepy, datetime
-from weather import Weather
-
-
-#TODO create message format with the api data
-def constructMessage():
-    for spot in spotArray:
-        # strftime formats the date into YYYYMMDD for the URL parameter
-        #Accessing the spitcast api
-        continue
-
-
-Weather = Weather(unit="f")
 
 class SpitCast:
     def __init__(self):
@@ -19,12 +7,16 @@ class SpitCast:
         self.SPITCAST_URL_PARAMETER = "/?dval="
 
 
-    def callApi(self, spot):
-        today = datetime.datetime.today()
-        tomorrow = today + datetime.timedelta(days=1)
-        urlToRequest = self.SPITCAST_URL + spot + self.SPITCAST_URL_PARAMETER + tomorrow.strftime('%Y%m%d')
+    def get_forecast(self, spot):
+        urlToRequest = self.SPITCAST_URL + spot + self.SPITCAST_URL_PARAMETER
         urlResponse = urllib.urlopen(urlToRequest)
         return json.loads(urlResponse.read())
+
+
+    #TODO create message format with the api data
+    #def construct_message(self, jsonData):
+
+
 
 
 class Twitter:
@@ -34,7 +26,7 @@ class Twitter:
 
 
     #TODO implement tweeting
-    def postTweet(self, message):
+    def post_tweet(self, message):
         self.twitter.update_status(message)
 
 

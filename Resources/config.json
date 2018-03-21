@@ -1,10 +1,9 @@
 {
   "Locations": {
     "__comment": "location ids for Spitcast and the Weather API uses WOEIDs found at http://www.woeidlookup.com/",
-    "Pleasure Point": {
-      "SpitCast": "1",
-      "Weather": "2488853"
-    }
+    "IDs": [
+      {"Name":"Pleasure Point", "SpitCast" : "1", "Weather" : "2488853"}
+    ]
   },
   "TwitterAPI": {
     "__comment": "apps.twitter.com for api keys",
