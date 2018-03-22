@@ -24,7 +24,7 @@ class SpitCast:
                 swell = entry["shape_detail"]["swell"]
                 message = "Forecast for "+name+" at "+hour+": "+"Wind is "+wind+", wave size is "+waveSize+" ft, swell is "+swell
                 self.TWITTER_API.post_tweet(message)
-                print("success")
+                sleep(5)
 
 
 class Twitter:

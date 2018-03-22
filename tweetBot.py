@@ -16,8 +16,10 @@ def main():
     update_thread.start()
     sleep(10)  #to allow all new forecasts to be added
 
-    for name in range(0,1):
-        SPITCAST_API.construct_message(jsonDict[idArray[name]["Name"]], get_hour())
+    while True:
+        for name in range(0,1):
+            SPITCAST_API.construct_message(jsonDict[idArray[name]["Name"]], get_hour())
+        sleep(10800)
 
 
 def get_new_forecasts():
@@ -27,7 +29,7 @@ def get_new_forecasts():
             name = idArray[location]["Name"]
             jsonDict[name] = jsonData
 
-        sleep(86400)
+        sleep(86400)  #sleep for 24 hours
 
 
 def get_hour():
