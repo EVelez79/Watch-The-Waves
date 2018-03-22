@@ -14,9 +14,12 @@ class SpitCast:
 
 
     #TODO create message format with the api data
-    #def construct_message(self, jsonData):
-
-
+    def construct_message(self, jsonData, hour):
+        for index, entry in enumerate(jsonData):
+            if entry["hour"] == hour:
+                waveSize = "%.2f" % entry["size"]
+                wind = entry["shape_detail"]["wind"]
+                swell = entry["shape_detail"]["swell"]
 
 
 class Twitter:
