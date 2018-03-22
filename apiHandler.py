@@ -1,33 +1,50 @@
-import urllib, json, tweepy, configHandler, datetime
+import urllib, json, tweepy, configHandler
 
-config = configHandler.readConfig()
-# spots are Spitcast's ID for locations
-spotArray = config["SpitCastAPI"]["Locations"]
-today = datetime.datetime.today()
-tomorrow = today + datetime.timedelta(days=1)
+class SpitCast:
+    def __init__(self):
+        # spots are Spitcast's ID for locations
+        self.SPITCAST_URL = "http://api.spitcast.com/api/spot/forecast/"
+        self.SPITCAST_URL_PARAMETER = "/?dval="
+        self.TWITTER_API = Twitter()
 
-SPITCAST_URL = "http://api.spitcast.com/api/spot/forecast/"
-URL_PARAMETER = "/?dval="
 
-def constructMessage():
-    for spot in spotArray:
-        # strftime formats the date into YYYYMMDD for the URL parameter
-        urlToRequest = SPITCAST_URL + spot + URL_PARAMETER + tomorrow.strftime('%Y%m%d')
+    def get_forecast(self, spot):
+        urlToRequest = self.SPITCAST_URL + spot + self.SPITCAST_URL_PARAMETER
         urlResponse = urllib.urlopen(urlToRequest)
-        responseData = json.loads(urlResponse.read())
+        return json.loads(urlResponse.read())
 
-def postTweet(message):
-    if twitter is None:
-        setTwitterAuth()
 
-def setTwitterAuth():
-    twitterConfig = config["TwitterAPI"]
-    consumerKey = twitterConfig["ConsumerKey"]
-    consumerSecret = twitterConfig["ConsumerSecret"]
-    accessToken = twitterConfig["OAuthToken"]
-    accessTokenSecret = twitterConfig["OAuthSecret"]
+    #TODO create message format with the api data
+    def construct_message(self, jsonData, hour):
+        for index, entry in enumerate(jsonData):
+            if entry["hour"] == hour:
+                name = entry["spot_name"]
+                waveSize = "%.2f" % entry["size"]
+                wind = entry["shape_detail"]["wind"]
+                swell = entry["shape_detail"]["swell"]
+                message = "Forecast for "+name+" at "+hour+": "+"Wind is "+wind+", wave size is "+waveSize+" ft, swell is "+swell
+                self.TWITTER_API.post_tweet(message)
+                sleep(5)
 
-    auth = tweepy.OAuthHandler(consumerKey, consumerSecret)
-    auth.set_access_token(accessToken, accessTokenSecret)
 
-    twitter = tweepy.API(auth)
+class Twitter:
+    def __init__(self):
+        self.config = configHandler.readConfig()
+        self.twitter = self._setupTwitterAuth()
+
+
+    #TODO implement tweeting
+    def post_tweet(self, message):
+        self.twitter.update_status(message)
+
+
+    def _setupTwitterAuth(self):
+        consumerKey = self.config["TwitterAPI"]["ConsumerKey"]
+        consumerSecret = self.config["TwitterAPI"]["ConsumerSecret"]
+        accessToken = self.config["TwitterAPI"]["OAuthToken"]
+        accessTokenSecret = self.config["TwitterAPI"]["OAuthSecret"]
+
+        auth = tweepy.OAuthHandler(consumerKey, consumerSecret)
+        auth.set_access_token(accessToken, accessTokenSecret)
+
+        return tweepy.API(auth)
