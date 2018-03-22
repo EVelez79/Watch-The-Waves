@@ -14,7 +14,7 @@ def main():
         print("Exception when creating thread object")
 
     update_thread.start()
-    time.sleep(10)  #to allow all new forecasts to be added
+    sleep(10)  #to allow all new forecasts to be added
 
     for name in range(0,1):
         SPITCAST_API.construct_message(jsonDict[idArray[name]["Name"]], get_hour())
@@ -27,7 +27,7 @@ def get_new_forecasts():
             name = idArray[location]["Name"]
             jsonDict[name] = jsonData
 
-        time.sleep(86400)
+        sleep(86400)
 
 
 def get_hour():
