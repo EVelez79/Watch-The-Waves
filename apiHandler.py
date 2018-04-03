@@ -1,30 +1,72 @@
-import urllib, json, tweepy, configHandler
+import urllib, json, tweepy, datetime
+
+#TODO create message format with the api data
+def construct_message(self, jsonData, hour):
+    for index, entry in enumerate(jsonData):
+        if entry["hour"] == hour:
+            name = entry["spot_name"]
+            waveSize = "%.2f" % entry["size"]
+            wind = entry["shape_detail"]["wind"]
+            swell = entry["shape_detail"]["swell"]
+            message = "Forecast for "+name+" at "+hour+": "+"Wind is "+wind+", wave size is "+waveSize+" ft, swell is "+swell
+            self.TWITTER_API.post_tweet(message)
+            sleep(5)
+
+
+def _httpGet(url):
+    urlResponse = urllib.urlopen(url)
+    read = urlResponse.read()
+    return read
+
+
+class OpenWeather:
+    OPEN_WEATHER_URL = "http://api.openweathermap.org/data/2.5/"
+    KEY_PARAM = "&appid="
+    ZIP_PARAM = "?zip="
+    WEATHER_ENDPOINT = "weather"
+
+
+    def __init__(self, key):
+        self.key = key
+
+
+    def getForecastByZip(self, zip):
+        urlToRequest = self.OPEN_WEATHER_URL + self.WEATHER_ENDPOINT + self.ZIP_PARAM + str(zip) + self.KEY_PARAM + self.key
+        forecast = json.loads(_httpGet(urlToRequest))
+        return forecast
+      
 
 class SpitCast:
+    FORECAST_PATH = "/spot/forecast"  # suffix: spot
+    TEMPERATURE_PATH = "/county/water-temperature"  # suffix: countyName
+    SPITCAST_URL = "http://api.spitcast.com/api"
+    SPITCAST_URL_PARAMETER = "/?dval="
+
+
     def __init__(self):
-        # spots are Spitcast's ID for locations
-        self.SPITCAST_URL = "http://api.spitcast.com/api/spot/forecast/"
-        self.SPITCAST_URL_PARAMETER = "/?dval="
-        self.TWITTER_API = Twitter()
+        pass
 
 
-    def get_forecast(self, spot):
-        urlToRequest = self.SPITCAST_URL + spot + self.SPITCAST_URL_PARAMETER
-        urlResponse = urllib.urlopen(urlToRequest)
-        return json.loads(urlResponse.read())
+    #currently all forecasts are only one day ahead
+    #TODO add variable timedelta for the forecast
+    def getForecast(self, spot):
+        today = datetime.datetime.today()
+        tomorrow = today + datetime.timedelta(days=1)
+        urlToRequest = self.SPITCAST_URL + self.FORECAST_PATH + "/" + spot + self.SPITCAST_URL_PARAMETER + tomorrow.strftime('%Y%m%d')
+        urlResponse = json.loads(_httpGet(urlToRequest))
+
+        return urlResponse
 
 
-    #TODO create message format with the api data
-    def construct_message(self, jsonData, hour):
-        for index, entry in enumerate(jsonData):
-            if entry["hour"] == hour:
-                name = entry["spot_name"]
-                waveSize = "%.2f" % entry["size"]
-                wind = entry["shape_detail"]["wind"]
-                swell = entry["shape_detail"]["swell"]
-                message = "Forecast for "+name+" at "+hour+": "+"Wind is "+wind+", wave size is "+waveSize+" ft, swell is "+swell
-                self.TWITTER_API.post_tweet(message)
-                sleep(5)
+    #error 500 when requesting for los-angeles
+    def getWaterTemp(self, spot):
+        today = datetime.datetime.today()
+        tomorrow = today + datetime.timedelta(days=1)
+
+        urlToRequest = self.SPITCAST_URL + self.TEMPERATURE_PATH + "/" + spot +"/"
+        urlResponse = json.loads(_httpGet(urlToRequest))
+
+        return urlResponse
 
 
 class Twitter:
@@ -32,10 +74,13 @@ class Twitter:
         self.config = configHandler.readConfig()
         self.twitter = self._setupTwitterAuth()
 
-
-    #TODO implement tweeting
-    def post_tweet(self, message):
-        self.twitter.update_status(message)
+        
+    #imagePath is a string
+    def postTweet(self, message, imagePath=None):
+        if imagePath == None:
+            self.twitter.update_status(message)
+        else:
+            self.twitter.update_with_media(imagePath, message)
 
 
     def _setupTwitterAuth(self):
