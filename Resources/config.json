@@ -1,10 +1,20 @@
 {
   "Locations": {
-    "__comment": "location ids for Spitcast and the Weather API uses WOEIDs found at http://www.woeidlookup.com/",
+    "__comment": "location ids for Spitcast and the OpenWeatherAPI uses zip codes",
     "Pleasure Point": {
-      "SpitCast": "1",
-      "Weather": "2488853"
+      "SpitCastID": "1",
+      "SpitCastCounty": "santa-cruz",
+      "Zip": "95062"
+    },
+    "15th St, Del Mar":{
+      "SpitCastID": "230",
+      "SpitCastCounty": "san-diego",
+      "Zip": "92014"
     }
+  },
+  "OpenWeatherAPI": {
+    "__comment": "Documentation and keys at https://openweathermap.org/",
+    "Key": ""
   },
   "TwitterAPI": {
     "__comment": "apps.twitter.com for api keys",
