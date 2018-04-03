@@ -34,7 +34,7 @@ class OpenWeather:
         urlToRequest = self.OPEN_WEATHER_URL + self.WEATHER_ENDPOINT + self.ZIP_PARAM + str(zip) + self.KEY_PARAM + self.key
         forecast = json.loads(_httpGet(urlToRequest))
         return forecast
-      
+
 
 class SpitCast:
     FORECAST_PATH = "/spot/forecast"  # suffix: spot
@@ -70,11 +70,10 @@ class SpitCast:
 
 
 class Twitter:
-    def __init__(self):
-        self.config = configHandler.readConfig()
-        self.twitter = self._setupTwitterAuth()
+    def __init__(self, twtrConfig):
+        self.twitter = self._setupTwitterAuth(twtrConfig)
 
-        
+
     #imagePath is a string
     def postTweet(self, message, imagePath=None):
         if imagePath == None:
@@ -83,11 +82,11 @@ class Twitter:
             self.twitter.update_with_media(imagePath, message)
 
 
-    def _setupTwitterAuth(self):
-        consumerKey = self.config["TwitterAPI"]["ConsumerKey"]
-        consumerSecret = self.config["TwitterAPI"]["ConsumerSecret"]
-        accessToken = self.config["TwitterAPI"]["OAuthToken"]
-        accessTokenSecret = self.config["TwitterAPI"]["OAuthSecret"]
+    def _setupTwitterAuth(self, twtrConfig):
+        consumerKey = twtrConfig["ConsumerKey"]
+        consumerSecret = twtrConfig["ConsumerSecret"]
+        accessToken = twtrConfig["OAuthToken"]
+        accessTokenSecret = twtrConfig["OAuthSecret"]
 
         auth = tweepy.OAuthHandler(consumerKey, consumerSecret)
         auth.set_access_token(accessToken, accessTokenSecret)
