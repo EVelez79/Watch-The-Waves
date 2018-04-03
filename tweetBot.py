@@ -1,12 +1,13 @@
-import apiHandler, datetime, urllib, json
+import apiHandler, datetime, json
 
 CONFIG_DIR = "Resources/config.json"
 DATABASE_DIR = "/Data/"
 
 config = json.loads(open(CONFIG_DIR, "r").read())
 
-spotArray = config["Locations"]
-today = datetime.datetime.today()
-tomorrow = today + datetime.timedelta(days=1)
+locations = config["Locations"]
+
+spitcast = apiHandler.SpitCast()
+weather = apiHandler.OpenWeather(config["OpenWeatherAPI"]["Key"])
 
 twitter = apiHandler.Twitter(config["TwitterAPI"])

@@ -1,16 +1,20 @@
-import urllib2, json, tweepy, datetime
-
+import urllib, json, tweepy, datetime
 
 #TODO create message format with the api data
-def constructMessage():
-    for spot in spotArray:
-        # strftime formats the date into YYYYMMDD for the URL parameter
-        #Accessing the spitcast api
-        continue
+def construct_message(self, jsonData, hour):
+    for index, entry in enumerate(jsonData):
+        if entry["hour"] == hour:
+            name = entry["spot_name"]
+            waveSize = "%.2f" % entry["size"]
+            wind = entry["shape_detail"]["wind"]
+            swell = entry["shape_detail"]["swell"]
+            message = "Forecast for "+name+" at "+hour+": "+"Wind is "+wind+", wave size is "+waveSize+" ft, swell is "+swell
+            self.TWITTER_API.post_tweet(message)
+            sleep(5)
 
 
 def _httpGet(url):
-    urlResponse = urllib2.urlopen(url)
+    urlResponse = urllib.urlopen(url)
     read = urlResponse.read()
     return read
 
@@ -30,7 +34,7 @@ class OpenWeather:
         urlToRequest = self.OPEN_WEATHER_URL + self.WEATHER_ENDPOINT + self.ZIP_PARAM + str(zip) + self.KEY_PARAM + self.key
         forecast = json.loads(_httpGet(urlToRequest))
         return forecast
-
+      
 
 class SpitCast:
     FORECAST_PATH = "/spot/forecast"  # suffix: spot
@@ -60,18 +64,17 @@ class SpitCast:
         tomorrow = today + datetime.timedelta(days=1)
 
         urlToRequest = self.SPITCAST_URL + self.TEMPERATURE_PATH + "/" + spot +"/"
-        u = _httpGet(urlToRequest)
-        urlResponse = json.loads(u)
+        urlResponse = json.loads(_httpGet(urlToRequest))
 
         return urlResponse
 
 
 class Twitter:
-    def __init__(self, twitterConfig):
-        self.config = twitterConfig
+    def __init__(self):
+        self.config = configHandler.readConfig()
         self.twitter = self._setupTwitterAuth()
 
-
+        
     #imagePath is a string
     def postTweet(self, message, imagePath=None):
         if imagePath == None:
@@ -81,10 +84,10 @@ class Twitter:
 
 
     def _setupTwitterAuth(self):
-        consumerKey = self.config["ConsumerKey"]
-        consumerSecret = self.config["ConsumerSecret"]
-        accessToken = self.config["OAuthToken"]
-        accessTokenSecret = self.config["OAuthSecret"]
+        consumerKey = self.config["TwitterAPI"]["ConsumerKey"]
+        consumerSecret = self.config["TwitterAPI"]["ConsumerSecret"]
+        accessToken = self.config["TwitterAPI"]["OAuthToken"]
+        accessTokenSecret = self.config["TwitterAPI"]["OAuthSecret"]
 
         auth = tweepy.OAuthHandler(consumerKey, consumerSecret)
         auth.set_access_token(accessToken, accessTokenSecret)
